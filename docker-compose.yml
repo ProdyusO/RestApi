@@ -15,14 +15,15 @@ services:
       - db
 
 
-# database
+ #database
   db:
-    image: postgres:12.1-alpine
+    restart: always
+    image: postgres:12
     container_name: db_service_rest
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     ports:
-      - "5434:5434"
+      - "5434:5432"
     env_file:
       - .db_env.dev
 
