@@ -1,14 +1,15 @@
 import os
+from celery.schedules import crontab
 from pathlib import Path
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-75x_lck_()9=ms$xuntfaab8t81qdma8s3h*9bc%2xyi1og_!p')
 
-DEBUG = os.environ.get('DEBUG', default=True)
+DEBUG = bool(os.environ.get('DEBUG', default=True))
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split()
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '').split()
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -90,3 +91,33 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+EMAIL_PORT = 1025
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+DEFAULT_FROM_EMAIL = 'noreply@test.com'
+
+ADMINS = [('Oleksii', 'thegreat@admin.com'), ]
+
+CELERY_BROKER_URL = os.environ.get('CELERY_BROKER', 'amqp://rabbit:rabbit@rabbitmq:5672')
+
+CELERY_RESULT_BACKEND = os.environ.get('CELERY_BACKED', 'redis://redis:6379/0')
+
+CELERY_BEAT_SCHEDULE = {
+    'delete_data': {
+        'task': 'main.tasks.delete_data',
+        'schedule': crontab(minute='*/2'),
+    }
+}
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://redis:6379/1',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient'
+        },
+        'KEY_PREFIX': 'example'
+    }
+}

@@ -1,13 +1,13 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from .views import AmountOfUpvotesVievSet, AuthorViewSet, CommentsViewSet
+from .views import AmountOfUpVotesViewSet, AuthorViewSet, CommentsViewSet
 
 
 router = DefaultRouter()
 router.register('author', AuthorViewSet)
 router.register('comment', CommentsViewSet)
-router.register('amount_of_upvotes', AmountOfUpvotesVievSet)
+router.register('amount_of_upvotes', AmountOfUpVotesViewSet)
 
 
 urlpatterns = [

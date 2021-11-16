@@ -7,26 +7,78 @@ services:
     build: .
     container_name: web_service_rest
     command: python manage.py runserver 0:8000
+    volumes:
+      - ./src:/usr/src
     ports:
       - "8002:8000"
     env_file:
-      - .web_env.dev
+      - .env
     depends_on:
       - db
-
+      - rabbitmq
 
  #database
   db:
     restart: always
-    image: postgres:12
+    image: postgres:12.0-alpine
     container_name: db_service_rest
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     ports:
       - "5434:5432"
     env_file:
-      - .db_env.dev
+      - .env
+
+
+  rabbitmq:
+    image: rabbitmq:3.9-alpine
+    env_file:
+      - .env
+    ports:
+      - "5672:5672"
+    volumes:
+      - rabbitmq_volume:/var/lib/rabbitmq
+
+
+  redis:
+    image: redis:6-alpine
+    container_name: redis_service
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_volume:/data
+
+  celery:
+    build: .
+    container_name: celery_service
+    command: sh -c "celery -A rest worker --concurrency=20 --loglevel=info"
+    env_file:
+      - .env
+    volumes:
+      - ./src:/usr/src
+    depends_on:
+      - redis
+      - rabbitmq
+
+
+  celery-beat:
+    build: .
+    container_name: celery_beat_service
+    command: sh -c "celery -A rest beat -l info"
+    env_file:
+      - .env
+    volumes:
+      - ./src:/usr/src
+    depends_on:
+      - redis
+      - rabbitmq
+      - celery
+
 
 volumes:
   postgres_data:
     name: db_data
+  rabbitmq_volume:
+    name: rabbitmq_volume
+  redis_volume:
+    name: redis_volume
