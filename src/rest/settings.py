@@ -37,7 +37,7 @@ ROOT_URLCONF = 'rest.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -51,6 +51,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'rest.wsgi.application'
+
 
 DATABASES = {
     'default': {
@@ -88,7 +89,12 @@ USE_L10N = True
 
 USE_TZ = True
 
+STATIC_ROOT = BASE_DIR / 'static'
 STATIC_URL = '/static/'
+
+
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -111,13 +117,13 @@ CELERY_BEAT_SCHEDULE = {
     }
 }
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://redis:6379/1',
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient'
-        },
-        'KEY_PREFIX': 'example'
-    }
-}
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django_redis.cache.RedisCache',
+#         'LOCATION': 'redis://redis:6379/1',
+#         'OPTIONS': {
+#             'CLIENT_CLASS': 'django_redis.client.DefaultClient'
+#         },
+#         'KEY_PREFIX': 'example'
+#     }
+# }
