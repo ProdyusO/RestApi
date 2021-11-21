@@ -1,5 +1,4 @@
 import os
-from celery.schedules import crontab
 from pathlib import Path
 
 
@@ -106,16 +105,16 @@ DEFAULT_FROM_EMAIL = 'noreply@test.com'
 
 ADMINS = [('Oleksii', 'thegreat@admin.com'), ]
 
-CELERY_BROKER_URL = os.environ.get('CELERY_BROKER', 'amqp://rabbit:rabbit@rabbitmq:5672')
-
-CELERY_RESULT_BACKEND = os.environ.get('CELERY_BACKED', 'redis://redis:6379/0')
-
-CELERY_BEAT_SCHEDULE = {
-    'delete_data': {
-        'task': 'main.tasks.delete_data',
-        'schedule': crontab(minute='*/2'),
-    }
-}
+# CELERY_BROKER_URL = os.environ.get('CELERY_BROKER', 'amqp://rabbit:rabbit@rabbitmq:5672')
+#
+# CELERY_RESULT_BACKEND = os.environ.get('CELERY_BACKED', 'redis://redis:6379/0')
+#
+# CELERY_BEAT_SCHEDULE = {
+#     'delete_data': {
+#         'task': 'main.tasks.delete_data',
+#         'schedule': crontab(minute='*/2'),
+#     }
+# }
 
 # CACHES = {
 #     'default': {

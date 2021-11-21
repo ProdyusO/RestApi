@@ -1,7 +1,4 @@
-celery==5.2.0
 Django==3.2.9
 djangorestframework==3.12.4
-redis==3.5.3
-django-redis==5.0.0
 psycopg2-binary==2.9.1
 gunicorn==20.1.0
